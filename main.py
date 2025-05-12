@@ -134,3 +134,49 @@ plt.ylabel('True')
 plt.title('Confusion Matrix')
 plt.savefig('confusion_matrix.png')
 plt.close()
+
+
+
+# Visualize feature maps from conv_block_1
+# Select a random test image
+random_idx = torch.randint(0, len(test_data), (1,)).item()
+image, label = test_data[random_idx]
+image_tensor = image.unsqueeze(0).to(device)  # Add batch dimension [1, 1, 28, 28]
+
+# Extract feature maps from conv_block_1
+model.eval()
+with torch.no_grad():
+    features = model.conv_block1(image_tensor)  # Output shape: [1, 10, 14, 14]
+
+# Remove batch dimension and move to CPU
+features = features.squeeze(0).cpu().numpy()  # Shape [10, 14, 14]
+
+# Plot original image and feature maps
+fig, axs = plt.subplots(3, 5, figsize=(15, 8))
+axs[0, 0].imshow(image.squeeze(), cmap='gray')
+axs[0, 0].set_title(f'Original (Label: {label})')
+axs[0, 0].axis('off')
+
+# Hide unused subplots in the first row
+for i in range(1, 5):
+    axs[0, i].axis('off')
+
+# Plot feature maps
+for i in range(10):
+    row = 1 + i // 5
+    col = i % 5
+    axs[row, col].imshow(features[i], cmap='gray')
+    axs[row, col].set_title(f'Channel {i}')
+    axs[row, col].axis('off')
+
+# Hide unused subplots in the last row
+for i in range(10, 15):
+    row = 2
+    col = i % 5
+    axs[row, col].axis('off')
+
+plt.tight_layout()
+plt.savefig('feature_maps.png')
+plt.close()
+
+print("Feature maps saved to feature_maps.png")
