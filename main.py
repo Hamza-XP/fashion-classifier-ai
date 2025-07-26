@@ -137,7 +137,6 @@ plt.savefig('confusion_matrix.png')
 plt.close()
 
 
-
 # Visualize feature maps from conv_block_1
 # Select a random test image
 random_idx = torch.randint(0, len(test_data), (1,)).item()
