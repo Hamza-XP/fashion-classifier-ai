@@ -170,6 +170,7 @@ for i in range(10):
     axs[row, col].set_title(f'Channel {i}')
     axs[row, col].axis('off')
 
+
 # Hide unused subplots in the last row
 for i in range(10, 15):
     row = 2
